@@ -10,29 +10,55 @@ const communityRoutes = require("./routes/community");
 
 const app = express();
 
-// ✅ CORS Configuration - Fixed for Render + Vercel
+// ✅ FIXED CORS Configuration
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-  process.env.FRONTEND_URL, // Example: https://skillverse.vercel.app
-].filter(Boolean); // remove undefined if .env is missing
+  "http://127.0.0.1:3000",
+  "https://skillverse-kappa.vercel.app",
+  "https://skillverse-git-main-renukas-projects-64d87f3a.vercel.app",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
+console.log("🔧 Allowed CORS Origins:", allowedOrigins);
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Allow requests with no origin (mobile apps, Postman, etc.)
+      if (!origin) {
+        console.log("✅ Request with no origin allowed");
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        console.log(`✅ CORS allowed for origin: ${origin}`);
         callback(null, true);
       } else {
-        console.log(`❌ Blocked by CORS: ${origin}`);
+        console.log(`❌ CORS blocked origin: ${origin}`);
+        console.log(`📝 Allowed origins: ${allowedOrigins.join(", ")}`);
         callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    allowedHeaders: [
+      "Origin",
+      "X-Requested-With",
+      "Content-Type",
+      "Accept",
+      "Authorization",
+      "Cache-Control",
+    ],
+    exposedHeaders: ["Authorization"],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   })
 );
+
+// ✅ Handle preflight requests explicitly
+app.options("*", cors());
 
 // ✅ Essential Middleware - in correct order
 app.use(express.json({ limit: "10mb" }));
@@ -41,6 +67,7 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 // ✅ Request Logging Middleware
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
+  console.log(`Origin: ${req.headers.origin || "No origin"}`);
   if (req.body && Object.keys(req.body).length > 0) {
     const logBody = { ...req.body };
     if (logBody.password) logBody.password = "[HIDDEN]";
@@ -58,6 +85,8 @@ app.get("/", (req, res) => {
     status: "OK",
     message: "SkillVerse API Server is running",
     timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || "development",
+    allowedOrigins: allowedOrigins,
     endpoints: {
       health: "/api/health",
       auth: "/api/auth/*",
@@ -74,6 +103,7 @@ app.get("/api/health", (req, res) => {
     timestamp: new Date().toISOString(),
     database: "Connected",
     environment: process.env.NODE_ENV || "development",
+    corsOrigins: allowedOrigins,
   });
 });
 
@@ -115,6 +145,15 @@ app.use("/api/*", (req, res) => {
 // ✅ Global Error Handler
 app.use((error, req, res, next) => {
   console.error("❌ Global error handler:", error);
+
+  if (error.message === "Not allowed by CORS") {
+    return res.status(403).json({
+      success: false,
+      message: "CORS policy violation",
+      origin: req.headers.origin,
+      allowedOrigins: allowedOrigins,
+    });
+  }
 
   if (error.name === "ValidationError") {
     const errors = Object.values(error.errors).map((err) => err.message);
@@ -167,12 +206,13 @@ app.use((error, req, res, next) => {
 // ✅ Start Server
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log("🚀=================================🚀");
   console.log(`✅ Server running on port ${PORT}`);
   console.log(`📊 API available at http://localhost:${PORT}/api`);
   console.log(`🔍 Health check: http://localhost:${PORT}/api/health`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
+  console.log(`🔗 Allowed Origins: ${allowedOrigins.join(", ")}`);
   console.log("🚀=================================🚀");
 });
 
