@@ -34,15 +34,13 @@
 ## 📂 Folder Structure
 
 SkillVerse/
-├── client/ # Frontend React code
-├── server/ # Backend Node.js/Express code
+├── client/ 
+├── server/ 
 └── README.md
 
 
 ## 📎 License
 
 MIT License
-
----
 
 Built with ❤️ for learners by [Renuka Patil](https://github.com/RenukaPail3122)
