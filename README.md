@@ -33,6 +33,7 @@
 
 ## 📂 Folder Structure
 
+```
 SkillVerse/
 ├── client/                 # React frontend
 │   ├── src/
@@ -47,6 +48,7 @@ SkillVerse/
 │   ├── package.json
 │   └── server.js
 └── README.md
+```
 
 ## 📎 License
 
