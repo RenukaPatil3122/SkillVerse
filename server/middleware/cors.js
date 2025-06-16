@@ -1,4 +1,4 @@
-const cors = require("cors");
+const { applyCors } = require("./config/cors"); // Adjust path if needed
 
 const allowedOrigins = [
   "http://localhost:3000",
