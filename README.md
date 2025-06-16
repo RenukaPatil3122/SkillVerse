@@ -4,12 +4,11 @@
 
 ## ✨ Features
 
-- 📚 Personalized Learning Roadmaps
-- 🧠 AI-powered Skill Development Flow
-- 🤝 Community Collaboration & Discussion
-- 📈 Progress Tracking & Goal Setting
-- 🔐 Secure User Authentication
-- 🗂 Resource Curation for Every Skill
+- 🔐 **User Authentication** – Secure login & registration using JWT
+- 🗺 **Roadmap Management** – Browse, create, and manage skill-based learning paths
+- 🗣 **Community Posts** – Share thoughts and interact with other learners
+- 📈 **Progress Tracking** – Stay on top of your learning goals (coming soon)
+- 🧠 **Personalized Learning Flow** – Skill-first approach to self-paced learning
 
 ## 🛠 Tech Stack
 
