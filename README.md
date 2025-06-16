@@ -34,8 +34,8 @@
 ## 📂 Folder Structure
 
 SkillVerse/
-├── client/ 
-├── server/ 
+├── client/                 # React frontend
+├── server/                 # Node.js backend
 └── README.md
 
 
