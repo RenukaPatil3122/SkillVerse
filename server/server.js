@@ -10,17 +10,24 @@ const communityRoutes = require("./routes/community");
 
 const app = express();
 
-// ✅ CORS Configuration - Must be FIRST
+// ✅ CORS Configuration - Fixed for Render + Vercel
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  process.env.FRONTEND_URL, // Example: https://skillverse.vercel.app
+].filter(Boolean); // remove undefined if .env is missing
+
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? [process.env.FRONTEND_URL]
-        : [
-            "http://localhost:3000",
-            "http://localhost:5173",
-            "http://127.0.0.1:5173",
-          ],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.log(`❌ Blocked by CORS: ${origin}`);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
@@ -109,7 +116,6 @@ app.use("/api/*", (req, res) => {
 app.use((error, req, res, next) => {
   console.error("❌ Global error handler:", error);
 
-  // Mongoose validation error
   if (error.name === "ValidationError") {
     const errors = Object.values(error.errors).map((err) => err.message);
     return res.status(400).json({
@@ -119,7 +125,6 @@ app.use((error, req, res, next) => {
     });
   }
 
-  // Mongoose cast error
   if (error.name === "CastError") {
     return res.status(400).json({
       success: false,
@@ -127,7 +132,6 @@ app.use((error, req, res, next) => {
     });
   }
 
-  // JWT errors
   if (error.name === "JsonWebTokenError") {
     return res.status(401).json({
       success: false,
@@ -142,7 +146,6 @@ app.use((error, req, res, next) => {
     });
   }
 
-  // Duplicate key error
   if (error.code === 11000) {
     const field = Object.keys(error.keyPattern)[0];
     return res.status(400).json({
@@ -151,7 +154,6 @@ app.use((error, req, res, next) => {
     });
   }
 
-  // Default error
   res.status(error.status || 500).json({
     success: false,
     message: error.message || "Internal server error",

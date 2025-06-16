@@ -1,17 +1,20 @@
 const cors = require("cors");
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "http://127.0.0.1:3000",
+  "http://127.0.0.1:5173",
+];
+
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, etc.)
+    // No origin for mobile apps, Postman, etc.
     if (!origin) return callback(null, true);
-
-    const allowedOrigins = [
-      "http://localhost:3000",
-      "http://localhost:5173",
-      "http://127.0.0.1:3000",
-      "http://127.0.0.1:5173",
-      process.env.FRONTEND_URL,
-    ].filter(Boolean); // Remove undefined values
 
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
@@ -30,17 +33,14 @@ const corsOptions = {
     "Authorization",
   ],
   exposedHeaders: ["Authorization"],
-  maxAge: 86400, // 24 hours
+  maxAge: 86400,
 };
 
 module.exports = {
   corsOptions,
   applyCors: (app) => {
     app.use(cors(corsOptions));
-
-    // Additional preflight handling
     app.options("*", cors(corsOptions));
-
     console.log("✅ CORS configured successfully");
   },
 };
