@@ -1,155 +1,49 @@
 # SkillVerse
 
-A comprehensive learning platform that helps users discover, track, and master new skills through personalized roadmaps and community collaboration.
+**SkillVerse** is a modern full-stack web platform that helps users discover, track, and master new skills through personalized roadmaps and a collaborative community.
 
-## 🚀 Features
+## ✨ Features
 
-- **Personalized Learning Roadmaps**: AI-powered skill development paths
-- **Community Collaboration**: Share knowledge and learn together
-- **Progress Tracking**: Monitor your learning journey
-- **Resource Management**: Curated learning materials
-- **User Authentication**: Secure user accounts and profiles
+- 📚 Personalized Learning Roadmaps
+- 🧠 AI-powered Skill Development Flow
+- 🤝 Community Collaboration & Discussion
+- 📈 Progress Tracking & Goal Setting
+- 🔐 Secure User Authentication
+- 🗂 Resource Curation for Every Skill
 
 ## 🛠 Tech Stack
 
-### Frontend (Client)
+### Frontend
 
-- **React.js** - UI framework
-- **Vite** - Build tool
-- **Tailwind CSS** - Styling
-- **Axios** - API requests
-- **React Router** - Navigation
+- **React.js** + **Vite**
+- **Tailwind CSS**
+- **Axios**, **React Router**
 
-### Backend (Server)
+### Backend
 
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **MongoDB Atlas** - Database
-- **Mongoose** - ODM
-- **JWT** - Authentication
-- **bcryptjs** - Password hashing
-
-
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js (v16 or higher)
-- npm or yarn
-- MongoDB Atlas account
-
-### Installation
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/SkillVerse.git
-   cd SkillVerse
-   ```
-
-2. **Install server dependencies**
-
-   ```bash
-   cd server
-   npm install
-   ```
-
-3. **Install client dependencies**
-
-   ```bash
-   cd ../client
-   npm install
-   ```
-
-4. **Environment Setup**
-
-   Create `.env` file in the `server` directory:
-
-   ```env
-   MONGODB_URI=your_mongodb_atlas_connection_string
-   JWT_SECRET=your_jwt_secret_key
-   CLIENT_URL=http://localhost:3000
-   FRONTEND_URL=http://localhost:3000
-   PORT=5000
-   NODE_ENV=development
-   ```
-
-5. **Run the application**
-
-   Start the backend server:
-
-   ```bash
-   cd server
-   npm start
-   ```
-
-   Start the frontend (in a new terminal):
-
-   ```bash
-   cd client
-   npm run dev
-   ```
-
-6. **Access the application**
-   - Frontend: `http://localhost:3000` or `http://localhost:5173`
-   - Backend API: `http://localhost:5000/api`
-   - Health Check: `http://localhost:5000/api/health`
+- **Node.js**, **Express.js**
+- **MongoDB Atlas**, **Mongoose**
+- **JWT** for Auth
+- **bcryptjs** for Password Security
 
 ## 🌐 Deployment
 
-### Backend (Render)
+- **Frontend** → [Vercel](https://vercel.com/)
+- **Backend** → [Render](https://render.com/)
+- **Database** → [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
 
-- Deployed on Render
-- Environment variables configured
-- MongoDB Atlas connection
+## 📂 Folder Structure
 
-### Frontend (Vercel)
+SkillVerse/
+├── client/ # Frontend React code
+├── server/ # Backend Node.js/Express code
+└── README.md
 
-- Deployed on Vercel
-- Automatic deployments from GitHub
-- Environment variables for API endpoints
 
-## 🔧 API Endpoints
+## 📎 License
 
-### Authentication
+MIT License
 
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `GET /api/auth/me` - Get current user
+---
 
-### Roadmaps
-
-- `GET /api/roadmaps` - Get all roadmaps
-- `POST /api/roadmaps` - Create new roadmap
-- `GET /api/roadmaps/:id` - Get specific roadmap
-- `PUT /api/roadmaps/:id` - Update roadmap
-- `DELETE /api/roadmaps/:id` - Delete roadmap
-
-### Community
-
-- `GET /api/community` - Get community posts
-- `POST /api/community` - Create new post
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👥 Authors
-
-- **Your Name** - _Initial work_ - [YourGitHub](https://github.com/YOUR_USERNAME)
-
-## 🙏 Acknowledgments
-
-- Thanks to all contributors
-- Inspiration from various learning platforms
-- MongoDB Atlas for database hosting
-- Vercel and Render for deployment platforms
+Built with ❤️ for learners by [Renuka Patil](https://github.com/RenukaPail3122)
