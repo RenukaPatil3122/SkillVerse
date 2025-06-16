@@ -35,9 +35,18 @@
 
 SkillVerse/
 ├── client/                 # React frontend
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.js
 ├── server/                 # Node.js backend
+│   ├── routes/
+│   ├── models/
+│   ├── config/
+│   ├── middleware/
+│   ├── package.json
+│   └── server.js
 └── README.md
-
 
 ## 📎 License
 
