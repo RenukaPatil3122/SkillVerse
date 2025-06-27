@@ -50,8 +50,5 @@ SkillVerse/
 └── README.md
 ```
 
-## 📎 License
-
-MIT License
 
 Built with ❤️ for learners by [Renuka Patil](https://github.com/RenukaPail3122)
