@@ -54,7 +54,7 @@ app.use(
     exposedHeaders: ["Authorization"],
     preflightContinue: false,
     optionsSuccessStatus: 204,
-  })
+  }),
 );
 
 // ✅ Handle preflight requests explicitly
@@ -63,6 +63,9 @@ app.options("*", cors());
 // ✅ Essential Middleware - in correct order
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+const statsRoutes = require("./routes/stats");
+app.use("/api/stats", statsRoutes);
 
 // ✅ Request Logging Middleware
 app.use((req, res, next) => {
