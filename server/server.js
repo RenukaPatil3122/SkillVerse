@@ -50,6 +50,7 @@ app.use(
       "Accept",
       "Authorization",
       "Cache-Control",
+      "x-admin-token",
     ],
     exposedHeaders: ["Authorization"],
     preflightContinue: false,
@@ -66,6 +67,8 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 const statsRoutes = require("./routes/stats");
 app.use("/api/stats", statsRoutes);
+
+app.use("/api/admin", require("./routes/admin"));
 
 // ✅ Request Logging Middleware
 app.use((req, res, next) => {

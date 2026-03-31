@@ -9,12 +9,12 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Roadmaps from "./pages/Roadmaps";
 import Community from "./pages/Community";
-// ✅ Add these imports for missing routes
 import CreateRoadmap from "./pages/CreateRoadmap";
 import EditRoadmap from "./pages/EditRoadmap";
 import RoadmapDetail from "./pages/RoadmapDetail";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   return (
@@ -88,6 +88,7 @@ function App() {
                 }
               />
 
+              <Route path="/admin" element={<AdminDashboard />} />
               {/* ✅ Catch all route for 404 */}
               <Route
                 path="*"
