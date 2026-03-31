@@ -63,7 +63,7 @@ const Navbar = () => {
           </div>
 
           {/* Right side actions */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
@@ -95,12 +95,20 @@ const Navbar = () => {
                 </button>
               </div>
             ) : (
-              <Link
-                to="/login"
-                className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-colors font-medium"
-              >
-                Login
-              </Link>
+              <div className="flex items-center space-x-2">
+                <Link
+                  to="/register"
+                  className="border border-primary-500 text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 px-4 py-2 rounded-lg transition-colors font-medium text-sm"
+                >
+                  Sign Up
+                </Link>
+                <Link
+                  to="/login"
+                  className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-colors font-medium text-sm"
+                >
+                  Login
+                </Link>
+              </div>
             )}
 
             {/* Mobile menu button */}
@@ -132,6 +140,25 @@ const Navbar = () => {
                   <span>{item.name}</span>
                 </Link>
               ))}
+              {/* Mobile Sign Up / Login links */}
+              {!user && (
+                <div className="flex gap-2 px-3 pt-2">
+                  <Link
+                    to="/register"
+                    className="flex-1 text-center border border-primary-500 text-primary-500 py-2 rounded-lg text-sm font-medium"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Sign Up
+                  </Link>
+                  <Link
+                    to="/login"
+                    className="flex-1 text-center bg-primary-500 text-white py-2 rounded-lg text-sm font-medium"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Login
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}

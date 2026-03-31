@@ -2,8 +2,6 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 
-// ── Reuse or define models ────────────────────────────────────────────────────
-
 const User =
   mongoose.models.User ||
   mongoose.model(
@@ -41,8 +39,6 @@ const Post =
     ),
   );
 
-// ── Simple password middleware ────────────────────────────────────────────────
-// Change this password to whatever you want!
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "skillverse@admin2024";
 
 function adminAuth(req, res, next) {
@@ -53,7 +49,6 @@ function adminAuth(req, res, next) {
   next();
 }
 
-// ── POST /api/admin/login ─────────────────────────────────────────────────────
 router.post("/login", (req, res) => {
   const { password } = req.body;
   if (password === ADMIN_PASSWORD) {
@@ -63,7 +58,6 @@ router.post("/login", (req, res) => {
   }
 });
 
-// ── GET /api/admin/stats ──────────────────────────────────────────────────────
 router.get("/stats", adminAuth, async (req, res) => {
   try {
     const now = new Date();
@@ -76,8 +70,9 @@ router.get("/stats", adminAuth, async (req, res) => {
       newUsersThisWeek,
       newUsersThisMonth,
       newRoadmapsThisWeek,
-      recentUsers,
-      recentRoadmaps,
+      // ✅ No .limit() — fetch ALL
+      allUsers,
+      allRoadmaps,
       totalPosts,
     ] = await Promise.all([
       User.countDocuments(),
@@ -85,18 +80,14 @@ router.get("/stats", adminAuth, async (req, res) => {
       User.countDocuments({ createdAt: { $gte: last7 } }),
       User.countDocuments({ createdAt: { $gte: last30 } }),
       Roadmap.countDocuments({ createdAt: { $gte: last7 } }),
-      User.find()
-        .sort({ createdAt: -1 })
-        .limit(10)
-        .select("name email createdAt"),
+      User.find().sort({ createdAt: -1 }).select("name email createdAt"),
       Roadmap.find()
         .sort({ createdAt: -1 })
-        .limit(10)
         .select("title category createdAt isPublic"),
-      Post.countDocuments().catch(() => 0), // graceful if no Post model
+      Post.countDocuments().catch(() => 0),
     ]);
 
-    // User growth — last 7 days breakdown
+    // User growth — last 7 days
     const userGrowth = [];
     for (let i = 6; i >= 0; i--) {
       const dayStart = new Date(now);
@@ -104,11 +95,9 @@ router.get("/stats", adminAuth, async (req, res) => {
       dayStart.setHours(0, 0, 0, 0);
       const dayEnd = new Date(dayStart);
       dayEnd.setHours(23, 59, 59, 999);
-
       const count = await User.countDocuments({
         createdAt: { $gte: dayStart, $lte: dayEnd },
       });
-
       userGrowth.push({
         date: dayStart.toLocaleDateString("en-IN", {
           weekday: "short",
@@ -118,7 +107,6 @@ router.get("/stats", adminAuth, async (req, res) => {
       });
     }
 
-    // Roadmaps by category
     const categoryAgg = await Roadmap.aggregate([
       { $group: { _id: "$category", count: { $sum: 1 } } },
       { $sort: { count: -1 } },
@@ -137,8 +125,8 @@ router.get("/stats", adminAuth, async (req, res) => {
           newUsersMonth: newUsersThisMonth,
           newRoadmapsWeek: newRoadmapsThisWeek,
         },
-        recentUsers,
-        recentRoadmaps,
+        recentUsers: allUsers,
+        recentRoadmaps: allRoadmaps,
         userGrowth,
         roadmapsByCategory: categoryAgg,
       },
@@ -151,7 +139,6 @@ router.get("/stats", adminAuth, async (req, res) => {
   }
 });
 
-// ── DELETE /api/admin/users/:id ───────────────────────────────────────────────
 router.delete("/users/:id", adminAuth, async (req, res) => {
   try {
     await User.findByIdAndDelete(req.params.id);
@@ -161,7 +148,6 @@ router.delete("/users/:id", adminAuth, async (req, res) => {
   }
 });
 
-// ── DELETE /api/admin/roadmaps/:id ────────────────────────────────────────────
 router.delete("/roadmaps/:id", adminAuth, async (req, res) => {
   try {
     await Roadmap.findByIdAndDelete(req.params.id);
